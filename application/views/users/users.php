@@ -68,6 +68,7 @@
                         <th>Email</th>
                         <th>Mobile</th>
                         <th>Role</th>
+                        <th>Status</th>
                         <th>Created On</th>
                         <th class="text-center">Actions</th>
                     </tr>
@@ -81,7 +82,17 @@
                         <td><?php echo $record->name ?></td>
                         <td><?php echo $record->email ?></td>
                         <td><?php echo $record->mobile ?></td>
-                        <td><?php echo $record->role; if($record->roleStatus == INACTIVE) { echo ' <span class="label label-warning">Inactive</span>'; } ?></td>
+                        <td><?php echo $record->role; if($record->roleStatus == 2) { echo ' <span class="label label-warning">Inactive</span>'; } ?></td>
+                        <td>
+                            <?php 
+                            if($record->status == ACTIVE) {
+                                ?> <span class="label label-success">Active</span> <?php
+                            } else {
+                                ?> <span class="label label-warning">Inactive</span> <?php
+                            }
+                            ?>
+                        </td>
+                       
                         <td><?php echo date("d-m-Y", strtotime($record->createdDtm)) ?></td>
                         <td class="text-center">
                             <a class="btn btn-sm btn-primary" href="<?= base_url().'login-history/'.$record->userId; ?>" title="Login history"><i class="fa fa-history"></i></a> | 

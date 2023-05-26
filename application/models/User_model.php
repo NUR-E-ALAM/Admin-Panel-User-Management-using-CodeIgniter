@@ -16,7 +16,7 @@ class User_model extends CI_Model
      */
     function userListingCount($searchText)
     {
-        $this->db->select('BaseTbl.userId, BaseTbl.email, BaseTbl.name, BaseTbl.mobile, BaseTbl.isAdmin, BaseTbl.createdDtm, Role.role');
+        $this->db->select('BaseTbl.userId, BaseTbl.email, BaseTbl.name, BaseTbl.mobile, BaseTbl.isAdmin, BaseTbl.status, BaseTbl.createdDtm, Role.role');
         $this->db->from('tbl_users as BaseTbl');
         $this->db->join('tbl_roles as Role', 'Role.roleId = BaseTbl.roleId','left');
         if(!empty($searchText)) {
@@ -41,7 +41,7 @@ class User_model extends CI_Model
      */
     function userListing($searchText, $page, $segment)
     {
-        $this->db->select('BaseTbl.userId, BaseTbl.email, BaseTbl.name, BaseTbl.mobile, BaseTbl.isAdmin, BaseTbl.createdDtm, 
+        $this->db->select('BaseTbl.userId, BaseTbl.email, BaseTbl.name, BaseTbl.mobile, BaseTbl.status,BaseTbl.isAdmin, BaseTbl.createdDtm, 
         Role.role, Role.status as roleStatus');
         $this->db->from('tbl_users as BaseTbl');
         $this->db->join('tbl_roles as Role', 'Role.roleId = BaseTbl.roleId','left');
@@ -118,7 +118,7 @@ class User_model extends CI_Model
      */
     function getUserInfo($userId)
     {
-        $this->db->select('userId, name, email, mobile, isAdmin, roleId');
+        $this->db->select('userId, name, email, mobile,status, isAdmin, roleId');
         $this->db->from('tbl_users');
         $this->db->where('isDeleted', 0);
         $this->db->where('userId', $userId);

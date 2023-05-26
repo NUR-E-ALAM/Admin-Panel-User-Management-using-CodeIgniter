@@ -5,6 +5,7 @@ $email = $userInfo->email;
 $mobile = $userInfo->mobile;
 $roleId = $userInfo->roleId;
 $isAdmin = $userInfo->isAdmin;
+$status = $userInfo->status;
 ?>
 
 <div class="content-wrapper">
@@ -107,6 +108,13 @@ $isAdmin = $userInfo->isAdmin;
                                     </div>
                                 </div>
                                 <div class="col-md-6">
+                                <div class="form-group">
+                                        <label for="status">Status</label>
+                                        <select class="form-control required" id="status" name="status">
+                                            <option value="1" <?php if($status == 1) {echo "selected=selected";} ?>>ACTIVE</option>
+                                            <option value="0" <?php if($status == 0) {echo "selected=selected";} ?>>INACTIVE</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div> 
                         </div><!-- /.box-body -->
