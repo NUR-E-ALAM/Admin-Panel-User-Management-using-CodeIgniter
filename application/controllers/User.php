@@ -133,8 +133,7 @@ class User extends BaseController
                 $mobile = $this->security->xss_clean($this->input->post('mobile'));
                 $isAdmin = $this->input->post('isAdmin');
                 
-                $userInfo = array('email'=>$email, 'password'=>getHashedPassword($password), 'roleId'=>$roleId,
-                        'name'=> $name, 'mobile'=>$mobile, 'isAdmin'=>$isAdmin,
+                $userInfo = array('email'=>$email, 'password'=>getHashedPassword($password), 'roleId'=>$roleId, 'name'=> $name, 'mobile'=>$mobile,'status'=>1, 'isAdmin'=>$isAdmin,
                         'createdBy'=>$this->vendorId, 'createdDtm'=>date('Y-m-d H:i:s'));
                 
                 $this->load->model('user_model');
