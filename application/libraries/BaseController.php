@@ -3,9 +3,9 @@
 /**
  * Class : BaseController
  * Base Class to control over all the classes
- * @author : Kishor Mali
+  * @author : Tanzir Nur
  * @version : 1.1
- * @since : 15 November 2016
+ * @since : 27 May 2023
  */
 class BaseController extends CI_Controller {
 	protected $role = '';

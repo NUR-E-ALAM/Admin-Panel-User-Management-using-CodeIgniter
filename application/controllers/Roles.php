@@ -5,9 +5,9 @@ require APPPATH . '/libraries/BaseController.php';
 /**
  * Class : Roles (RolesController)
  * Roles Class to control role related operations.
- * @author : Kishor Mali
+  * @author : Tanzir Nur
  * @version : 1.1
- * @since : 22 Jan 2021
+ * @since : 27 May 2023
  */
 class Roles extends BaseController
 {
