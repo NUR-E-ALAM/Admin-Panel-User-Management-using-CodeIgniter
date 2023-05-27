@@ -1,0 +1,2 @@
+super admin -> users -> admins
+user request -> Admin from,Name,Email,Mobile,Status,Created On,Actions
