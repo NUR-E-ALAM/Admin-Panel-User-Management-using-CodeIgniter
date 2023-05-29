@@ -3,11 +3,11 @@
 require APPPATH . '/libraries/BaseController.php';
 
 /**
- * Class : User (UserController)
+ * Class : User (SimpleUserController)
  * User Class to control all user related operations.
   * @author : Tanzir Nur
  * @version : 1.1
- * @since : 27 May 2023
+ * @since : 29 May 2023
  */
 class SimpleUser extends BaseController
 {
@@ -58,7 +58,7 @@ class SimpleUser extends BaseController
             
             $this->global['pageTitle'] = 'TanZirNur : User Listing';
             
-            $this->loadViews("users/users", $this->global, $data, NULL);
+            $this->loadViews("simpleusers/users", $this->global, $data, NULL);
         }
     }
 
@@ -78,7 +78,7 @@ class SimpleUser extends BaseController
             
             $this->global['pageTitle'] = 'TanZirNur : Add New User';
 
-            $this->loadViews("users/addNew", $this->global, $data, NULL);
+            $this->loadViews("simpleusers/addNew", $this->global, $data, NULL);
         }
     }
 
@@ -173,7 +173,7 @@ class SimpleUser extends BaseController
 
             $this->global['pageTitle'] = 'TanZirNur : Edit User';
             
-            $this->loadViews("users/editOld", $this->global, $data, NULL);
+            $this->loadViews("simpleusers/editOld", $this->global, $data, NULL);
         }
     }
     
@@ -312,7 +312,7 @@ class SimpleUser extends BaseController
             
             $this->global['pageTitle'] = 'TanZirNur : User Login History';
             
-            $this->loadViews("users/loginHistory", $this->global, $data, NULL);
+            $this->loadViews("simpleusers/loginHistory", $this->global, $data, NULL);
         }        
     }
 
@@ -325,7 +325,7 @@ class SimpleUser extends BaseController
         $data["active"] = $active;
         
         $this->global['pageTitle'] = $active == "details" ? 'TanZirNur : My Profile' : 'TanZirNur : Change Password';
-        $this->loadViews("users/profile", $this->global, $data, NULL);
+        $this->loadViews("simpleusers/profile", $this->global, $data, NULL);
     }
 
     /**
