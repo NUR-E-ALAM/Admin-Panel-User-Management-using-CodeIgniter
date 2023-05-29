@@ -68,10 +68,21 @@ $route['editOld'] = "user/editOld";
 $route['editOld/(:num)'] = "user/editOld/$1";
 $route['editUser'] = "user/editUser";
 $route['deleteUser'] = "user/deleteUser";
+
 $route['profile'] = "user/profile";
 $route['profile/(:any)'] = "user/profile/$1";
 $route['profileUpdate'] = "user/profileUpdate";
 $route['profileUpdate/(:any)'] = "user/profileUpdate/$1";
+## Simple user 
+$route['users'] = 'simpleuser/userListing';
+$route['user/(:num)'] = "simpleuser/userListing/$1";
+$route['add-new'] = "simpleuser/addNew";
+$route['add-new-user'] = "simpleuser/addNewUser";
+$route['edit-Old'] = "simpleuser/editOld";
+$route['edit-Old/(:num)'] = "simpleuser/editOld/$1";
+$route['edit-user'] = "simpleuser/editUser";
+$route['delete-user'] = "simpleuser/deleteUser";
+
 
 $route['loadChangePass'] = "user/loadChangePass";
 $route['changePassword'] = "user/changePassword";
