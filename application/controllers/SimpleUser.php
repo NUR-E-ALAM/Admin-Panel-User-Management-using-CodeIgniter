@@ -4,7 +4,7 @@ require APPPATH . '/libraries/BaseController.php';
 
 /**
  * Class : User (SimpleUserController)
- * User Class to control all user related operations.
+ * User Class to control all simple_user_model related operations.
   * @author : Tanzir Nur
  * @version : 1.1
  * @since : 29 May 2023
@@ -17,12 +17,12 @@ class SimpleUser extends BaseController
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('simple_user as user');
+        $this->load->model('simple_user_model');
         $this->isLoggedIn();
     }
     
     /**
-     * This function used to load the first screen of the user
+     * This function used to load the first screen of the simple_user_model
      */
     public function index()
     {
@@ -32,7 +32,7 @@ class SimpleUser extends BaseController
     }
     
     /**
-     * This function is used to load the user list
+     * This function is used to load the simple_user_model list
      */
     function userListing()
     {
@@ -50,13 +50,13 @@ class SimpleUser extends BaseController
             
             $this->load->library('pagination');
             
-            $count = $this->user->userListingCount($searchText);
+            $count = $this->simple_user_model->userListingCount($searchText);
 
 			$returns = $this->paginationCompress ( "userListing/", $count, 10 );
             
-            $data['userRecords'] = $this->user->userListing($searchText, $returns["page"], $returns["segment"]);
+            $data['userRecords'] = $this->simple_user_model->userListing($searchText, $returns["page"], $returns["segment"]);
             
-            $this->global['pageTitle'] = 'TanZirNur : User Listing';
+            $this->global['pageTitle'] = 'TanZirNur : Users';
             
             $this->loadViews("simpleusers/users", $this->global, $data, NULL);
         }
@@ -73,8 +73,8 @@ class SimpleUser extends BaseController
         }
         else
         {
-            $this->load->model('user');
-            $data['roles'] = $this->user->getUserRoles();
+            $this->load->model('simple_user_model');
+            $data['roles'] = $this->simple_user_model->getUserRoles();
             
             $this->global['pageTitle'] = 'TanZirNur : Add New User';
 
@@ -91,9 +91,9 @@ class SimpleUser extends BaseController
         $email = $this->input->post("email");
 
         if(empty($userId)){
-            $result = $this->user->checkEmailExists($email);
+            $result = $this->simple_user_model->checkEmailExists($email);
         } else {
-            $result = $this->user->checkEmailExists($email, $userId);
+            $result = $this->simple_user_model->checkEmailExists($email, $userId);
         }
 
         if(empty($result)){ echo("true"); }
@@ -101,7 +101,7 @@ class SimpleUser extends BaseController
     }
     
     /**
-     * This function is used to add new user to the system
+     * This function is used to add new simple_user_model to the system
      */
     function addNewUser()
     {
@@ -136,8 +136,8 @@ class SimpleUser extends BaseController
                 $userInfo = array('email'=>$email, 'password'=>getHashedPassword($password), 'roleId'=>$roleId, 'name'=> $name, 'mobile'=>$mobile,'status'=>1, 'isAdmin'=>$isAdmin,
                         'createdBy'=>$this->vendorId, 'createdDtm'=>date('Y-m-d H:i:s'));
                 
-                $this->load->model('user');
-                $result = $this->user->addNewUser($userInfo);
+                $this->load->model('simple_user_model');
+                $result = $this->simple_user_model->addNewUser($userInfo);
                 
                 if($result > 0){
                     $this->session->set_flashdata('success', 'New User created successfully');
@@ -152,8 +152,8 @@ class SimpleUser extends BaseController
 
     
     /**
-     * This function is used load user edit information
-     * @param number $userId : Optional : This is user id
+     * This function is used load simple_user_model edit information
+     * @param number $userId : Optional : This is simple_user_model id
      */
     function editOld($userId = NULL)
     {
@@ -168,8 +168,8 @@ class SimpleUser extends BaseController
                 redirect('userListing');
             }
             
-            $data['roles'] = $this->user->getUserRoles();
-            $data['userInfo'] = $this->user->getUserInfo($userId);
+            $data['roles'] = $this->simple_user_model->getUserRoles();
+            $data['userInfo'] = $this->simple_user_model->getUserInfo($userId);
 
             $this->global['pageTitle'] = 'TanZirNur : Edit User';
             
@@ -179,7 +179,7 @@ class SimpleUser extends BaseController
     
     
     /**
-     * This function is used to edit the user information
+     * This function is used to edit the simple_user_model information
      */
     function editUser()
     {
@@ -229,7 +229,7 @@ class SimpleUser extends BaseController
                         'updatedBy'=>$this->vendorId, 'updatedDtm'=>date('Y-m-d H:i:s'));
                 }
                 
-                $result = $this->user->editUser($userInfo, $userId);
+                $result = $this->simple_user_model->editUser($userInfo, $userId);
                 
                 if($result == true)
                 {
@@ -247,7 +247,7 @@ class SimpleUser extends BaseController
 
 
     /**
-     * This function is used to delete the user using userId
+     * This function is used to delete the simple_user_model using userId
      * @return boolean $result : TRUE / FALSE
      */
     function deleteUser()
@@ -261,7 +261,7 @@ class SimpleUser extends BaseController
             $userId = $this->input->post('userId');
             $userInfo = array('isDeleted'=>1,'updatedBy'=>$this->vendorId, 'updatedDtm'=>date('Y-m-d H:i:s'));
             
-            $result = $this->user->deleteUser($userId, $userInfo);
+            $result = $this->simple_user_model->deleteUser($userId, $userInfo);
             
             if ($result > 0) { echo(json_encode(array('status'=>TRUE))); }
             else { echo(json_encode(array('status'=>FALSE))); }
@@ -280,7 +280,7 @@ class SimpleUser extends BaseController
 
     /**
      * This function used to show login history
-     * @param number $userId : This is user id
+     * @param number $userId : This is simple_user_model id
      */
     function loginHistoy($userId = NULL)
     {
@@ -296,7 +296,7 @@ class SimpleUser extends BaseController
             $fromDate = $this->input->post('fromDate');
             $toDate = $this->input->post('toDate');
 
-            $data["userInfo"] = $this->user->getUserInfoById($userId);
+            $data["userInfo"] = $this->simple_user_model->getUserInfoById($userId);
 
             $data['searchText'] = $searchText;
             $data['fromDate'] = $fromDate;
@@ -304,11 +304,11 @@ class SimpleUser extends BaseController
             
             $this->load->library('pagination');
             
-            $count = $this->user->loginHistoryCount($userId, $searchText, $fromDate, $toDate);
+            $count = $this->simple_user_model->loginHistoryCount($userId, $searchText, $fromDate, $toDate);
 
             $returns = $this->paginationCompress ( "login-history/".$userId."/", $count, 10, 3);
 
-            $data['userRecords'] = $this->user->loginHistory($userId, $searchText, $fromDate, $toDate, $returns["page"], $returns["segment"]);
+            $data['userRecords'] = $this->simple_user_model->loginHistory($userId, $searchText, $fromDate, $toDate, $returns["page"], $returns["segment"]);
             
             $this->global['pageTitle'] = 'TanZirNur : User Login History';
             
@@ -321,7 +321,7 @@ class SimpleUser extends BaseController
      */
     function profile($active = "details")
     {
-        $data["userInfo"] = $this->user->getUserInfoWithRole($this->vendorId);
+        $data["userInfo"] = $this->simple_user_model->getUserInfoWithRole($this->vendorId);
         $data["active"] = $active;
         
         $this->global['pageTitle'] = $active == "details" ? 'TanZirNur : My Profile' : 'TanZirNur : Change Password';
@@ -329,7 +329,7 @@ class SimpleUser extends BaseController
     }
 
     /**
-     * This function is used to update the user details
+     * This function is used to update the simple_user_model details
      * @param text $active : This is flag to set the active tab
      */
     function profileUpdate($active = "details")
@@ -352,7 +352,7 @@ class SimpleUser extends BaseController
             
             $userInfo = array('name'=>$name, 'email'=>$email, 'mobile'=>$mobile, 'updatedBy'=>$this->vendorId, 'updatedDtm'=>date('Y-m-d H:i:s'));
             
-            $result = $this->user->editUser($userInfo, $this->vendorId);
+            $result = $this->simple_user_model->editUser($userInfo, $this->vendorId);
             
             if($result == true)
             {
@@ -369,7 +369,7 @@ class SimpleUser extends BaseController
     }
 
     /**
-     * This function is used to change the password of the user
+     * This function is used to change the password of the simple_user_model
      * @param text $active : This is flag to set the active tab
      */
     function changePassword($active = "changepass")
@@ -389,7 +389,7 @@ class SimpleUser extends BaseController
             $oldPassword = $this->input->post('oldPassword');
             $newPassword = $this->input->post('newPassword');
             
-            $resultPas = $this->user->matchOldPassword($this->vendorId, $oldPassword);
+            $resultPas = $this->simple_user_model->matchOldPassword($this->vendorId, $oldPassword);
             
             if(empty($resultPas))
             {
@@ -401,7 +401,7 @@ class SimpleUser extends BaseController
                 $usersData = array('password'=>getHashedPassword($newPassword), 'updatedBy'=>$this->vendorId,
                                 'updatedDtm'=>date('Y-m-d H:i:s'));
                 
-                $result = $this->user->changePassword($this->vendorId, $usersData);
+                $result = $this->simple_user_model->changePassword($this->vendorId, $usersData);
                 
                 if($result > 0) { $this->session->set_flashdata('success', 'Password updation successful'); }
                 else { $this->session->set_flashdata('error', 'Password updation failed'); }
@@ -421,9 +421,9 @@ class SimpleUser extends BaseController
         $return = false;
 
         if(empty($userId)){
-            $result = $this->user->checkEmailExists($email);
+            $result = $this->simple_user_model->checkEmailExists($email);
         } else {
-            $result = $this->user->checkEmailExists($email, $userId);
+            $result = $this->simple_user_model->checkEmailExists($email, $userId);
         }
 
         if(empty($result)){ $return = true; }

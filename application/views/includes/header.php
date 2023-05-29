@@ -150,6 +150,12 @@
               </a>
             </li>
             <li>
+              <a href="<?php echo base_url(); ?>users">
+                <i class="fa fa-users"></i>
+                <span>User Request</span>
+              </a>
+            </li>
+            <li>
               <a href="<?php echo base_url(); ?>roles/roleListing">
                 <i class="fa fa-user-circle-o " aria-hidden="true"></i>
                 <span>Roles</span>
