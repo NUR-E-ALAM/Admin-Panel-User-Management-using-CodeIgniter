@@ -3,8 +3,7 @@ $userId = $userInfo->userId;
 $name = $userInfo->name;
 $email = $userInfo->email;
 $mobile = $userInfo->mobile;
-$roleId = $userInfo->roleId;
-$isAdmin = $userInfo->isAdmin;
+$images = $userInfo->images;
 $status = $userInfo->status;
 ?>
 
@@ -32,7 +31,7 @@ $status = $userInfo->status;
                     </div><!-- /.box-header -->
                     <!-- form start -->
                     
-                    <form role="form" action="<?php echo base_url() ?>editUser" method="post" id="editUser" role="form">
+                    <form role="form" action="<?php echo base_url() ?>edit-user" method="post" id="editUser" role="form" enctype="multipart/form-data">
                         <div class="box-body">
                             <div class="row">
                                 <div class="col-md-6">                                
@@ -65,58 +64,26 @@ $status = $userInfo->status;
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="mobile">Mobile Number</label>
                                         <input type="text" class="form-control" id="mobile" placeholder="Mobile Number" name="mobile" value="<?php echo $mobile; ?>" maxlength="10">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <div class="form-group">
-                                        <label for="role">Role</label>
-                                        <select class="form-control" id="role" name="role">
-                                            <option value="0">Select Role</option>
-                                            <?php
-                                            if(!empty($roles))
-                                            {
-                                                foreach ($roles as $rl)
-                                                {
-                                                    $roleText = $rl->role;
-                                                    $roleClass = false;
-                                                    if ($rl->roleStatus == INACTIVE) {
-                                                        $roleText = $rl->role . ' (Inactive)';
-                                                        $roleClass = true;
-                                                    }
-                                                    ?>
-                                                    <option value="<?php echo $rl->roleId; ?>" <?php if ($roleClass) { echo "class=text-warning"; } ?>  <?php if($rl->roleId == $roleId) { echo "selected=selected";} ?>><?= $roleText ?></option>
-                                                    <?php
-                                                }
-                                            }
-                                            ?>
-                                        </select>
+                                        <label for="role">Picture</label>
+                                        <input type="file" class="form-control required" name="images" id="images">
                                     </div>
                                 </div> 
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="isAdmin">User Type</label>
-                                        <select class="form-control required" id="isAdmin" name="isAdmin">
-                                            <option value="<?= REGULAR_USER ?>" <?php if($isAdmin == REGULAR_USER) {echo "selected=selected";} ?>>Regular User</option>
-                                            <option value="<?= SYSTEM_ADMIN ?>" <?php if($isAdmin == SYSTEM_ADMIN) {echo "selected=selected";} ?>>System Administrator</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                 <div class="form-group">
-                                        <label for="status">Status</label>
-                                        <select class="form-control required" id="status" name="status">
-                                            <option value="1" <?php if($status == 1) {echo "selected=selected";} ?>>ACTIVE</option>
-                                            <option value="0" <?php if($status == 0) {echo "selected=selected";} ?>>INACTIVE</option>
-                                        </select>
-                                    </div>
+                                <img class="profile-user-img img-responsive" src="<?php echo $images ? base_url("assets/images/users/" . $images):base_url('assets/dist/img/avatar.png'); ?>" alt="User profile picture" id="imageShow">
+                                
                                 </div>
-                            </div> 
+                                </div>
+                            </div>
+                         
                         </div><!-- /.box-body -->
     
                         <div class="box-footer">
@@ -158,5 +125,13 @@ $status = $userInfo->status;
         </div>    
     </section>
 </div>
+<script>
+    images.onchange = evt => {
+  const [file] = images.files
+  if (file) {
+    imageShow.src = URL.createObjectURL(file)
+  }
+}
 
-<script src="<?php echo base_url(); ?>assets/js/editUser.js" type="text/javascript"></script>
+</script>
+<script src="<?php echo base_url(); ?>assets/js/editSimpleUser.js" type="text/javascript"></script>

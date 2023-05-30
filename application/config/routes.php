@@ -78,8 +78,8 @@ $route['users'] = 'simpleuser/userListing';
 $route['user/(:num)'] = "simpleuser/userListing/$1";
 $route['add-new'] = "simpleuser/addNew";
 $route['add-new-user'] = "simpleuser/addNewUser";
-$route['edit-Old'] = "simpleuser/editOld";
-$route['edit-Old/(:num)'] = "simpleuser/editOld/$1";
+$route['edit-old'] = "simpleuser/editOld";
+$route['edit-old/(:num)'] = "simpleuser/editOld/$1";
 $route['edit-user'] = "simpleuser/editUser";
 $route['delete-user'] = "simpleuser/deleteUser";
 

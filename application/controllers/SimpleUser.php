@@ -18,6 +18,7 @@ class SimpleUser extends BaseController
     {
         parent::__construct();
         $this->load->model('simple_user_model');
+        $this->load->library(["upload"]);
         $this->isLoggedIn();
     }
     
@@ -37,13 +38,7 @@ class SimpleUser extends BaseController
     function userListing()
     {
           
-        if(!$this->isAdmin())
-        {
-            
-            $this->loadThis();
-        }
-        else
-        {        
+             
            
             $searchText = '';
             if(!empty($this->input->post('searchText'))) {
@@ -62,7 +57,7 @@ class SimpleUser extends BaseController
             $this->global['pageTitle'] = 'TanZirNur : Users';
             
             $this->loadViews("simpleusers/users", $this->global, $data, NULL);
-        }
+        
     }
 
     /**
@@ -70,19 +65,14 @@ class SimpleUser extends BaseController
      */
     function addNew()
     {
-        if(!$this->isAdmin())
-        {
-            $this->loadThis();
-        }
-        else
-        {
+       
             $this->load->model('simple_user_model');
             $data['roles'] = $this->simple_user_model->getUserRoles();
             
             $this->global['pageTitle'] = 'TanZirNur : Add New User';
 
             $this->loadViews("simpleusers/addNew", $this->global, $data, NULL);
-        }
+        
     }
 
     /**
@@ -108,19 +98,13 @@ class SimpleUser extends BaseController
      */
     function addNewUser()
     {
-        if(!$this->isAdmin())
-        {
-            $this->loadThis();
-        }
-        else
-        {
+       
             $this->load->library('form_validation');
             
             $this->form_validation->set_rules('fname','Full Name','trim|required|max_length[128]');
             $this->form_validation->set_rules('email','Email','trim|required|valid_email|max_length[128]');
             $this->form_validation->set_rules('password','Password','required|max_length[20]');
             $this->form_validation->set_rules('cpassword','Confirm Password','trim|required|matches[password]|max_length[20]');
-            $this->form_validation->set_rules('role','Role','trim|required|numeric');
             $this->form_validation->set_rules('mobile','Mobile Number','required|min_length[10]');
             
             if($this->form_validation->run() == FALSE)
@@ -132,12 +116,39 @@ class SimpleUser extends BaseController
                 $name = ucwords(strtolower($this->security->xss_clean($this->input->post('fname'))));
                 $email = strtolower($this->security->xss_clean($this->input->post('email')));
                 $password = $this->input->post('password');
-                $roleId = $this->input->post('role');
+                $roleId = 0;
                 $mobile = $this->security->xss_clean($this->input->post('mobile'));
-                $isAdmin = $this->input->post('isAdmin');
+                $isAdmin = 0;
+                if (!is_dir(FCPATH . "/assets/images/users/")) {
+                    mkdir(FCPATH . "/assets/images/users/", 0777, true);
+                }
+                $config['upload_path'] = FCPATH . "/assets/images/users/";
+                $config['allowed_types'] = 'gif|jpg|png|bmp|jpeg';
+                $images = time() . "_" . $_FILES["images"]['name'];
+                $config['file_name'] = $images;
+                $this->upload->initialize($config);
+                $this->load->library('upload', $config);
+                if (!$this->upload->do_upload('images')) {
+                   
+                    $this->session->set_flashdata('error', $this->upload->display_errors());
+                    $this->addNew();
+                } else {
+                 $data['images'] =  $images;
+                }
+
                 
-                $userInfo = array('email'=>$email, 'password'=>getHashedPassword($password), 'roleId'=>$roleId, 'name'=> $name, 'mobile'=>$mobile,'status'=>1, 'isAdmin'=>$isAdmin,
-                        'createdBy'=>$this->vendorId, 'createdDtm'=>date('Y-m-d H:i:s'));
+                $userInfo = array(
+                    'email'=>$email, 
+                'password'=>getHashedPassword($password), 
+                'roleId'=>$roleId, 
+                'name'=> $name, 
+                'mobile'=>$mobile,
+                'images'=>$images,
+                'status'=>0,
+                'isAdmin'=>$isAdmin,
+                'createdBy'=>$this->vendorId,
+                'createdDtm'=>date('Y-m-d H:i:s')
+            );
                 
                 $this->load->model('simple_user_model');
                 $result = $this->simple_user_model->addNewUser($userInfo);
@@ -148,9 +159,9 @@ class SimpleUser extends BaseController
                     $this->session->set_flashdata('error', 'User creation failed');
                 }
                 
-                redirect('addNew');
+                redirect('users');
             }
-        }
+        
     }
 
     
@@ -160,15 +171,10 @@ class SimpleUser extends BaseController
      */
     function editOld($userId = NULL)
     {
-        if(!$this->isAdmin())
-        {
-            $this->loadThis();
-        }
-        else
-        {
+       
             if($userId == null)
             {
-                redirect('userListing');
+                redirect('users');
             }
             
             $data['roles'] = $this->simple_user_model->getUserRoles();
@@ -177,7 +183,7 @@ class SimpleUser extends BaseController
             $this->global['pageTitle'] = 'TanZirNur : Edit User';
             
             $this->loadViews("simpleusers/editOld", $this->global, $data, NULL);
-        }
+        
     }
     
     
@@ -186,24 +192,21 @@ class SimpleUser extends BaseController
      */
     function editUser()
     {
-        if(!$this->isAdmin())
-        {
-            $this->loadThis();
-        }
-        else
-        {
+       
             $this->load->library('form_validation');
             
             $userId = $this->input->post('userId');
+            
             
             $this->form_validation->set_rules('fname','Full Name','trim|required|max_length[128]');
             $this->form_validation->set_rules('email','Email','trim|required|valid_email|max_length[128]');
             $this->form_validation->set_rules('password','Password','matches[cpassword]|max_length[20]');
             $this->form_validation->set_rules('cpassword','Confirm Password','matches[password]|max_length[20]');
-            $this->form_validation->set_rules('role','Role','trim|required|numeric');
             $this->form_validation->set_rules('mobile','Mobile Number','required|min_length[10]');
-            $this->form_validation->set_rules('status','Status','required');
+
             
+            $user =  $this->simple_user_model->get_user_id($userId);
+            $prevImage =   FCPATH . "/assets/images/users/" . $user->images;
             if($this->form_validation->run() == FALSE)
             {
                 $this->editOld($userId);
@@ -213,10 +216,10 @@ class SimpleUser extends BaseController
                 $name = ucwords(strtolower($this->security->xss_clean($this->input->post('fname'))));
                 $email = strtolower($this->security->xss_clean($this->input->post('email')));
                 $password = $this->input->post('password');
-                $roleId = $this->input->post('role');
-                $status = $this->input->post('status');
+                $roleId = 0;
+                $status = 0;
                 $mobile = $this->security->xss_clean($this->input->post('mobile'));
-                $isAdmin = $this->input->post('isAdmin');
+                $isAdmin = 0;
                 
                 $userInfo = array();
                 
@@ -231,6 +234,23 @@ class SimpleUser extends BaseController
                         'name'=>ucwords($name), 'mobile'=>$mobile, 'isAdmin'=>$isAdmin, 
                         'updatedBy'=>$this->vendorId, 'updatedDtm'=>date('Y-m-d H:i:s'));
                 }
+                $config['upload_path'] = FCPATH . "/assets/images/users/";
+                $config['allowed_types'] = 'gif|jpg|png|bmp|jpeg';
+                $new_name = time() . "_" . $_FILES["images"]['name'];
+                $config['file_name'] = $new_name;
+                $this->upload->initialize($config);
+                $this->load->library('upload', $config);
+                if (!$this->upload->do_upload('images')) {
+                 
+                    $this->session->set_flashdata('error',  $this->upload->display_errors());
+                } else {
+                    $userInfo['images'] =  $new_name;
+                    // Remove old file from the server  
+                    if (!empty($prevImage)) {
+                        @unlink($prevImage);
+                    }
+                }
+
                 
                 $result = $this->simple_user_model->editUser($userInfo, $userId);
                 
@@ -243,9 +263,9 @@ class SimpleUser extends BaseController
                     $this->session->set_flashdata('error', 'User updation failed');
                 }
                 
-                redirect('userListing');
+                redirect('users');
             }
-        }
+        
     }
 
 

@@ -16,9 +16,8 @@ class Simple_user_model extends CI_Model
      */
     function userListingCount($searchText)
     {
-        $this->db->select('BaseTbl.userId, BaseTbl.email, BaseTbl.name, BaseTbl.mobile, BaseTbl.isAdmin, BaseTbl.status, BaseTbl.createdDtm, Role.role');
+        $this->db->select('BaseTbl.userId, BaseTbl.email, BaseTbl.name, BaseTbl.mobile,BaseTbl.images, BaseTbl.isAdmin, BaseTbl.status, BaseTbl.createdDtm');
         $this->db->from('tbl_simple_users as BaseTbl');
-        $this->db->join('tbl_roles as Role', 'Role.roleId = BaseTbl.roleId','left');
         if(!empty($searchText)) {
             $likeCriteria = "(BaseTbl.email  LIKE '%".$searchText."%'
                             OR  BaseTbl.name  LIKE '%".$searchText."%'
@@ -41,10 +40,8 @@ class Simple_user_model extends CI_Model
      */
     function userListing($searchText, $page, $segment)
     {
-        $this->db->select('BaseTbl.userId, BaseTbl.email, BaseTbl.name, BaseTbl.mobile, BaseTbl.status,BaseTbl.isAdmin, BaseTbl.createdDtm, 
-        Role.role, Role.status as roleStatus');
+        $this->db->select('BaseTbl.userId, BaseTbl.email, BaseTbl.name, BaseTbl.mobile,BaseTbl.images, BaseTbl.status,BaseTbl.isAdmin, BaseTbl.createdDtm');
         $this->db->from('tbl_simple_users as BaseTbl');
-        $this->db->join('tbl_roles as Role', 'Role.roleId = BaseTbl.roleId','left');
         if(!empty($searchText)) {
             $likeCriteria = "(BaseTbl.email  LIKE '%".$searchText."%'
                             OR  BaseTbl.name  LIKE '%".$searchText."%'
@@ -118,7 +115,7 @@ class Simple_user_model extends CI_Model
      */
     function getUserInfo($userId)
     {
-        $this->db->select('userId, name, email, mobile,status, isAdmin, roleId');
+        $this->db->select('userId, name, email, mobile,status,images');
         $this->db->from('tbl_simple_users');
         $this->db->where('isDeleted', 0);
         $this->db->where('userId', $userId);
@@ -273,6 +270,13 @@ class Simple_user_model extends CI_Model
         
         return $query->row();
     }
+       /** show single user  */
+       public function get_user_id($id)
+       {
+           $this->db->where('userId', $id);
+           $query = $this->db->get('tbl_simple_users', $id);
+           return $query->row();
+       }
 
     /**
      * This function used to get user information by id with role
