@@ -13,5 +13,7 @@ $config['moduleList'] = array(
     array('module'=>'Task',
     	'total_access'=>0, 'list'=>0, 'create_records'=>0, 'edit_records'=>0, 'delete_records'=>0),
     array('module'=>'Booking',
+    	'total_access'=>0, 'list'=>0, 'create_records'=>0, 'edit_records'=>0, 'delete_records'=>0),
+        array('module'=>'User Request',
     	'total_access'=>0, 'list'=>0, 'create_records'=>0, 'edit_records'=>0, 'delete_records'=>0)
 );

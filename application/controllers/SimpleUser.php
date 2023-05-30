@@ -36,12 +36,15 @@ class SimpleUser extends BaseController
      */
     function userListing()
     {
+          
         if(!$this->isAdmin())
         {
+            
             $this->loadThis();
         }
         else
         {        
+           
             $searchText = '';
             if(!empty($this->input->post('searchText'))) {
                 $searchText = $this->security->xss_clean($this->input->post('searchText'));

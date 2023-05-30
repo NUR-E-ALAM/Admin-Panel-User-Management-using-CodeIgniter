@@ -106,6 +106,12 @@
                 <i class="fa fa-dashboard"></i> <span>Dashboard</span></i>
               </a>
             </li>
+            <li>
+              <a href="<?php echo base_url(); ?>users">
+                <i class="fa fa-users"></i>
+                <span>User Request</span>
+              </a>
+            </li>
             <li class="treeview">
               <a href="#">
                 <i class="fa fa-share"></i> <span>Multilevel</span>
