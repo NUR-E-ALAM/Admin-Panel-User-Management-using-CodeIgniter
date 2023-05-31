@@ -204,7 +204,7 @@ class SimpleUser extends BaseController
             $this->form_validation->set_rules('cpassword','Confirm Password','matches[password]|max_length[20]');
             $this->form_validation->set_rules('mobile','Mobile Number','required|min_length[10]');
 
-            
+
             $user =  $this->simple_user_model->get_user_id($userId);
             $prevImage =   FCPATH . "/assets/images/users/" . $user->images;
             if($this->form_validation->run() == FALSE)
@@ -273,7 +273,25 @@ class SimpleUser extends BaseController
      * This function is used to delete the simple_user_model using userId
      * @return boolean $result : TRUE / FALSE
      */
-    function deleteUser()
+    function deleteSimpleUser()
+    {
+      
+            $userId = $this->input->post('userId');
+            // var_dump($userId);exit;
+            $userInfo = array('isDeleted'=>1,'updatedBy'=>$this->vendorId, 'updatedDtm'=>date('Y-m-d H:i:s'));
+            
+            $result = $this->simple_user_model->deleteUser($userId, $userInfo);
+            
+            if ($result > 0) { echo(json_encode(array('status'=>TRUE))); }
+            else { echo(json_encode(array('status'=>FALSE))); }
+        
+    }
+
+    /**
+     * This function is used to status update the simple_user_model using userId
+     * @return boolean $result : TRUE / FALSE
+     */
+    function statusUpdate()
     {
         if(!$this->isAdmin())
         {
@@ -282,10 +300,16 @@ class SimpleUser extends BaseController
         else
         {
             $userId = $this->input->post('userId');
-            $userInfo = array('isDeleted'=>1,'updatedBy'=>$this->vendorId, 'updatedDtm'=>date('Y-m-d H:i:s'));
+            $user =  $this->simple_user_model->get_user_id($userId);
+            if($user->status == 1){
+                $userInfo = array('status'=>0,'updatedBy'=>$this->vendorId, 'updatedDtm'=>date('Y-m-d H:i:s'));
+            }
+            else{
+                $userInfo = array('status'=>1,'updatedBy'=>$this->vendorId, 'updatedDtm'=>date('Y-m-d H:i:s'));
+            }
+           
             
-            $result = $this->simple_user_model->deleteUser($userId, $userInfo);
-            
+            $result = $this->simple_user_model->updateUserStatus($userId, $userInfo);
             if ($result > 0) { echo(json_encode(array('status'=>TRUE))); }
             else { echo(json_encode(array('status'=>FALSE))); }
         }

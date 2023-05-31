@@ -80,8 +80,9 @@ $route['add-new'] = "simpleuser/addNew";
 $route['add-new-user'] = "simpleuser/addNewUser";
 $route['edit-old'] = "simpleuser/editOld";
 $route['edit-old/(:num)'] = "simpleuser/editOld/$1";
+$route['status-update'] = "simpleuser/statusUpdate";
 $route['edit-user'] = "simpleuser/editUser";
-$route['delete-user'] = "simpleuser/deleteUser";
+$route['delete-user'] = "simpleuser/deleteSimpleUser";
 
 
 $route['loadChangePass'] = "user/loadChangePass";

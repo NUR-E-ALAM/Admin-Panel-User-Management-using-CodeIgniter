@@ -152,6 +152,18 @@ class Simple_user_model extends CI_Model
         
         return $this->db->affected_rows();
     }
+    /**
+     * This function is used to updateUserStatus the user information
+     * @param number $userId : This is user id
+     * @return boolean $result : TRUE / FALSE
+     */
+    function updateUserStatus($userId, $userInfo)
+    {
+        $this->db->where('userId', $userId);
+        $this->db->update('tbl_simple_users', $userInfo);
+        
+        return TRUE;
+    }
 
 
     /**
