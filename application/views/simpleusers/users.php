@@ -67,7 +67,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Mobile</th>
-                        <th>Image</th>
+                        <th>Picture</th>
                         <th>Status</th>
                         <th>Created On</th>
                         <th class="text-center">Actions</th>
@@ -77,6 +77,19 @@
                     {
                         foreach($userRecords as $record)
                         {
+                            $id= $record->userId;
+                            $status= $record->status;
+                            if ($status == 1) {
+                                $status = ' <span class="label label-warning">Deactive</span>';
+                                $btn = "<a href='#' data-object-id='" . $id . "'  data-object1-id='" . $id . "'  class='btn btn-success btn-sm delete-object' title='Enable'><i class='icon-eye-slash'></i> Enable</a>";
+                    
+                            } else {
+                                $status = '<span class="label label-success">Active</span>';
+                                // $btn = "<a href='#' data-object-id='" . $id . "' class='btn btn-warning btn-sm delete-object' title='Disable'><i class='fa fa-chain-broken'></i> Disable</a>";
+                                
+                       
+                                
+                            }
                     ?>
                     <tr>
                         <td><?php echo $record->name ?></td>
@@ -86,19 +99,18 @@
                                                     </td>
                    
                         <td>
-                            <?php 
-                            if($record->status == ACTIVE) {
-                                ?> <span class="label label-success">Active</span> <?php
-                            } else {
-                                ?> <span class="label label-warning">Inactive</span> <?php
-                            }
+                            <?php echo $status;
                             ?>
                         </td>
                        
                         <td><?php echo date("d-m-Y", strtotime($record->createdDtm)) ?></td>
                         <td class="text-center">
                             <a class="btn btn-sm btn-primary" href="<?= base_url().'login-history/'.$record->userId; ?>" title="Login history"><i class="fa fa-history"></i></a> | 
-                            <a class="btn btn-sm btn-info" href="<?php echo base_url().'edit-old/'.$record->userId; ?>" title="Edit"><i class="fa fa-pencil"></i></a>
+                            <a class="btn btn-sm btn-info" href="<?php echo base_url().'edit-old/'.$record->userId; ?>" title="Edit"><i class="fa fa-pencil"></i></a> | <?php if($status == 1){?>
+                                <a title="Status Active" class='btn btn-success btn-sm' onclick="return confirm('Are You sure to Deactive the selected Model ?')" href="<?php echo base_url().'edit-old/'.$record->userId; ?>" ><i class="fa fa-eye"></i></a>
+                         <?php   }else{ ?>
+                            <a title="Status Deactive" class='btn btn-warning btn-sm' onclick="return confirm('Are You sure to Active the selected Model ?')" href="<?php echo base_url().'edit-old/'.$record->userId; ?>" ><i class=" 	fa fa-eye-slash"></i></a>
+                        <?php }?> |
                             <a class="btn btn-sm btn-danger deleteUser" href="#" data-userid="<?php echo $record->userId; ?>" title="Delete"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
@@ -115,7 +127,33 @@
               </div><!-- /.box -->
             </div>
         </div>
+        <div id="delete_model" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 class="modal-title">Deactive Employee</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to deactivate this account ? <br><strong> It will disable this account
+                            access
+                            to
+                            user.</strong></p>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="object-id" value="">
+                    <input type="hidden" id="action-url" value="employee/disable_user">
+                    <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete-confirm">Confirm
+                    </button>
+                    <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
     </section>
+    
 </div>
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/js/common.js" charset="utf-8"></script>
 <script type="text/javascript">
@@ -128,4 +166,9 @@
             jQuery("#searchList").submit();
         });
     });
+    $('.delemp').click(function (e) {
+            e.preventDefault();
+            $('#empid').val($(this).attr('data-object-id'));
+
+        });
 </script>
