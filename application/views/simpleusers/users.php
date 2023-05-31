@@ -101,18 +101,21 @@
                        
                         <td><?php echo date("d-m-Y", strtotime($record->createdDtm)) ?></td>
                         <td class="text-center">
-                            <a class="btn btn-sm btn-primary" href="<?= base_url().'login-history/'.$record->userId; ?>" title="Login history"><i class="fa fa-history"></i></a>| <?php if($status == 1){?>
+                            <a class="btn btn-sm btn-primary" href="<?= base_url().'login-history/'.$record->userId; ?>" title="Login history"><i class="fa fa-history"></i></a>| <?php if($is_admin == 1){ 
+
+                            if($status == 1){?>
                             <a class='btn btn-success btn-sm updateUserStatus' href="#" data-userid="<?php echo $record->userId; ?>" title="Status Active"><i class="fa fa-eye"></i></a>
                             <?php   }else{ ?>
                                 <a class='btn btn-warning btn-sm updateUserStatus' href="#" data-userid="<?php echo $record->userId; ?>" title="Status Deactive"><i class="fa fa-eye-slash"></i></a>
-                                <?php }?>| 
+                                | <?php }    }?>
                             <a class="btn btn-sm btn-info" href="<?php echo base_url().'edit-old/'.$record->userId; ?>" title="Edit"><i class="fa fa-pencil"></i></a>|
                             <a class="btn btn-sm btn-danger deleteUser" href="#" data-userid="<?php echo $record->userId; ?>" title="Delete"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
                     <?php
                         }
-                    }
+                    } 
+             
                     ?>
                   </table>
                   
